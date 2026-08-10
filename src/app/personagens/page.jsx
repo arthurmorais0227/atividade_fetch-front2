@@ -1,5 +1,5 @@
 "use client"
-import styles from "./page.module.css";
+import styles from "./personagens.module.css";
 import axios from "axios";
 import CharacterCard from "@/components/CharacterCard/CharacterCard";
 import { useState, useEffect } from "react";
@@ -30,7 +30,20 @@ export default function Personagens() {
 
     return (
         <main className={styles.main}>
-            {personagens.map(personagem => <CharacterCard key={personagem.id} foto={personagem.image} nome={personagem.name} casa={personagem.house} ator={personagem.actor} />)}
+            { carregando && <p className={styles.carregando}>Carregando...</p> }
+            { erro && <p>{erro}</p> }
+
+            { !carregando &&
+                !erro &&
+                personagens.map(personagem => <CharacterCard 
+                    key={personagem.id} 
+                    foto={personagem.image} 
+                    nome={personagem.name} 
+                    casa={personagem.house} 
+                    ator={personagem.actor} 
+                    />)
+
+            }
         </main>
     );
 }
