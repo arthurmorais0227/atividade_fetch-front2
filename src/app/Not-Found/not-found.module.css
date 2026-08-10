@@ -1,3 +1,11 @@
+:global(body) {
+    background-image: url('/images/logo-wizardDex.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
 .container {
   display: flex;
   align-items: center;

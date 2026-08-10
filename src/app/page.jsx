@@ -34,7 +34,7 @@ export default function Home() {
               <Link href="/personagens" className={styles.botaoPrimario}>
                 🧙 Explorar personagens
               </Link>
-              <Link href="/sobre" className={styles.botaoSecundario}>
+              <Link href="/Sobre" className={styles.botaoSecundario}>
                 Conheça o projeto
               </Link>
             </div>
