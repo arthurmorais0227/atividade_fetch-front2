@@ -41,6 +41,12 @@ export default function Personagens() {
                     nome={personagem.name} 
                     casa={personagem.house} 
                     ator={personagem.actor} 
+                    especie={personagem.species}
+                    patrono={personagem.patronus}
+                    dataNascimento={personagem.dateOfBirth}
+                    corOlhos={personagem.eyeColour}
+                    corCabelo={personagem.hairColour}
+                    vivo={personagem.alive}
                     />)
 
             }
