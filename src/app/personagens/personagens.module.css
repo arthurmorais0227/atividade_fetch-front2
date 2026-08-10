@@ -1,0 +1,14 @@
+.main {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5rem;
+    padding: 5rem;
+}
+
+.carregando {
+    font-size: 3rem;
+    color: white;
+}
