@@ -1,5 +1,5 @@
 import styles from "./Home.module.css";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import Link from "next/link";
 import Image from 'next/image';
 
@@ -8,7 +8,6 @@ const LOGO = '/images/logo-wizardDex.png';
 export default function Home() {
   return (
     <>
-      <Header />
 
       <main className={styles.principal}>
         <section className={styles.heroInicial}>

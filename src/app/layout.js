@@ -1,5 +1,6 @@
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
+import Header from '@/components/Header/Header';
 
 export const metadata = {
     title: 'FrontEnd - Codeverse',
@@ -9,6 +10,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
     return (
         <html lang="pt-BR">
+            < Header />
             <body>
                 {children}
                 <Toaster />

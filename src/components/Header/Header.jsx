@@ -26,10 +26,7 @@ function Header() {
           <Link href="/personagens" className={styles.link}>
             Personagens
           </Link>
-          <Link href="/dados" className={styles.link}>
-            Dados
-          </Link>
-          <Link href="/sobre" className={styles.link}>
+          <Link href="/Sobre" className={styles.link}>
             Sobre
           </Link>
         </nav>
