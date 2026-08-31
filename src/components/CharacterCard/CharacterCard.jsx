@@ -1,53 +1,68 @@
-import styles from "./CharacterCard.module.css";
+"use client";
+
 import Image from "next/image";
-import { useState } from "react";
-import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import styles from "./CharacterCard.module.css";
 import Modal from "@/components/characterModal/Modal";
 
 export default function CharacterCard({
-    foto,
-    nome,
-    casa,
-    ator,
-    especie,
-    patrono,
-    dataNascimento,
-    corOlhos,
-    corCabelo,
-    vivo,
+    personagem,
+    favorito,
+    alterarFavorito,
 }) {
-    const [favorito, setFavorito] = useState(false);
     const [modalAberto, setModalAberto] = useState(false);
+    const [tema, setTema] = useState("light");
 
-    const gerenciarFavorito = () => {
-        if (!favorito) {
-            toast.success(`Marcou ${nome} como favorito!`);
+    useEffect(() => {
+        try {
+            const cookies = document.cookie.split(";");
+
+            for (let cookie of cookies) {
+                const [chave, valor] = cookie.trim().split("=");
+
+                if (chave === "tema") {
+                    setTema(valor);
+                    break;
+                }
+            }
+        } catch (error) {
+            console.error("Erro ao ler tema:", error.message);
         }
-
-        setFavorito(!favorito);
-    };
+    }, []);
 
     return (
         <>
-            <article className={styles.card} onClick={() => setModalAberto(true)}>
+            <article
+                className={`${styles.card} ${tema === "dark" ? styles.dark : styles.light}`}
+                onClick={() => setModalAberto(true)}
+            >
                 <Image
                     className={styles.imagem}
-                    src={foto || "/images/sem-foto.png"}
+                    src={personagem.image || "/images/sem-foto.png"}
                     width={130}
                     height={130}
-                    alt={nome || "Personagem"}
+                    alt={personagem.name || "Personagem"}
                 />
-                <p className={styles.nome}>{nome}</p>
-                <p className={styles.texto}>{casa}</p>
-                <p className={styles.texto}>{ator}</p>
+
+                <p className={styles.nome}>
+                    {personagem.name}
+                </p>
+
+                <p className={styles.texto}>
+                    {personagem.house || "Sem casa"}
+                </p>
+
+                <p className={styles.texto}>
+                    {personagem.actor || "Sem ator"}
+                </p>
 
                 <button
                     type="button"
+                    className={`${styles.coracao} ${favorito ? styles.coracaoAtivo : ""}`}
                     onClick={(event) => {
                         event.stopPropagation();
-                        gerenciarFavorito();
+                        alterarFavorito(personagem);
                     }}
-                    className={`${styles.coracao} ${favorito ? styles.coracaoAtivo : ""}`}
                     aria-label={favorito ? "Remover favorito" : "Adicionar favorito"}
                 >
                     {favorito ? "♥" : "♡"}
@@ -57,16 +72,16 @@ export default function CharacterCard({
             <Modal
                 isOpen={modalAberto}
                 onClose={() => setModalAberto(false)}
-                foto={foto}
-                nome={nome}
-                casa={casa}
-                especie={especie}
-                patrono={patrono}
-                dataNascimento={dataNascimento}
-                corOlhos={corOlhos}
-                corCabelo={corCabelo}
-                ator={ator}
-                vivo={vivo}
+                foto={personagem.image}
+                nome={personagem.name}
+                casa={personagem.house}
+                especie={personagem.species}
+                patrono={personagem.patronus}
+                dataNascimento={personagem.dateOfBirth}
+                corOlhos={personagem.eyeColour}
+                corCabelo={personagem.hairColour}
+                ator={personagem.actor}
+                vivo={personagem.alive}
             />
         </>
     );

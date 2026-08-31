@@ -1,23 +1,48 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(2, 6, 23, 0.78);
-  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 1rem;
+  backdrop-filter: blur(6px);
+  transition: 0.3s;
+}
+
+.dark {
+  background: rgba(2, 6, 23, 0.78);
+}
+
+.light {
+  background: rgba(2, 6, 23, 0.35);
 }
 
 .modal {
   position: relative;
   width: min(760px, 100%);
-  background: #111421;
-  border: 1px solid rgba(139, 92, 246, 0.25);
   border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
   padding: 1.5rem;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.35);
+  transition: 0.3s;
+}
+
+.dark .modal {
+  background: #111421;
+  border:
+    1px solid rgba(139, 92, 246, 0.25);
+  color: #f4f4f5;
+}
+
+.light .modal {
+  background: #ffffff;
+  border:
+    1px solid rgba(139, 92, 246, 0.25);
+
+  color: #1f2937;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.2);
 }
 
 .fechar {
@@ -26,9 +51,17 @@
   right: 12px;
   border: none;
   background: transparent;
-  color: #f4f4f5;
   font-size: 1.2rem;
   cursor: pointer;
+  z-index: 2;
+}
+
+.dark .fechar {
+  color: #f4f4f5;
+}
+
+.light .fechar {
+  color: #1f2937;
 }
 
 .conteudo {
@@ -41,12 +74,23 @@
   flex-shrink: 0;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.1);
+  border:
+    1px solid rgba(255, 255, 255, 0.1);
 }
+
+.light .imagemBox {
+  border:
+    1px solid rgba(0, 0, 0, 0.1);
+}
+
 
 .imagem {
   object-fit: cover;
   display: block;
+}
+
+.info {
+  width: 100%;
 }
 
 .info h3 {
@@ -55,17 +99,36 @@
   font-size: 1.35rem;
 }
 
+.light .info h3 {
+  color: #7c3aed;
+}
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(2,
+      minmax(0, 1fr));
   gap: 0.9rem;
 }
 
 .grid div {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.06);
   border-radius: 12px;
   padding: 0.75rem;
+  transition: 0.3s;
+}
+
+.dark .grid div {
+  background:
+    rgba(255, 255, 255, 0.04);
+  border:
+    1px solid rgba(255, 255, 255, 0.06);
+}
+
+.light .grid div {
+  background:
+    rgba(139, 92, 246, 0.05);
+  border:
+    1px solid rgba(139, 92, 246, 0.12);
 }
 
 .grid span {
@@ -78,11 +141,19 @@
   margin-bottom: 0.3rem;
 }
 
-.grid p {
+.dark .grid p {
   margin: 0;
   color: #f4f4f5;
   font-size: 0.95rem;
 }
+
+.light .grid p {
+  margin: 0;
+  color: #1f2937;
+  font-size: 0.95rem;
+}
+
+
 
 @media (max-width: 700px) {
   .conteudo {
@@ -91,5 +162,15 @@
 
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .modal {
+    max-height: 90vh;
+
+    overflow-y: auto;
+  }
+
+  .imagemBox {
+    margin-top: 1rem;
   }
 }

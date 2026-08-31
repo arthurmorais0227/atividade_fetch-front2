@@ -1,97 +1,418 @@
-'use client';
-import styles from './personagens.module.css';
-import axios from 'axios';
-import CharacterCard from '@/components/CharacterCard/CharacterCard';
-import { useState, useEffect } from 'react';
-import { Pagination, ConfigProvider } from 'antd';
+"use client";
+
+import { useState, useEffect } from "react";
+import axios from "axios";
+import CharacterCard from "@/components/CharacterCard/CharacterCard";
+import styles from "./personagens.module.css";
+import { Pagination, Tabs } from "antd";
+import toast from "react-hot-toast";
 
 export default function Personagens() {
     const [personagens, setPersonagens] = useState([]);
-    const [carregando, setCarregando] = useState(false);
-    const [erro, setErro] = useState('');
+    const [favoritos, setFavoritos] = useState([]);
+    const [tema, setTema] = useState("light");
+
+    const [loading, setLoading] = useState(false);
+    const [erro, setErro] = useState("");
 
     const [paginaAtual, setPaginaAtual] = useState(1);
-    const [itensPorPagina] = useState(10);
+
+    const itensPorPagina = 10;
 
     const buscarPersonagens = async () => {
-        setCarregando(true);
-        setErro('');
-
         try {
-            const { data } = await axios.get('https://hp-api.onrender.com/api/characters');
-            setPersonagens(data);
-        } catch {
-            setErro('Erro ao carregar personagens');
+            setLoading(true);
+
+            console.log("🔄 Iniciando busca na API...");
+
+            const response = await axios.get(
+                "https://hp-api.onrender.com/api/characters"
+            );
+
+            console.log(
+                "📡 Resposta da API:",
+                response.status,
+                response.data.length,
+                "personagens"
+            );
+
+            sessionStorage.setItem(
+                "personagens",
+                JSON.stringify(response.data)
+            );
+
+            console.log(
+                "💾 Personagens salvos no SessionStorage"
+            );
+
+            setPersonagens(response.data);
+
+        } catch (error) {
+            console.error(
+                "❌ Erro na busca:",
+                error.message
+            );
+
+            setErro("Erro ao carregar personagens");
+
         } finally {
-            setCarregando(false);
+            setLoading(false);
+
+            console.log("🏁 Loading finalizado");
+        }
+    };
+
+    const alterarFavorito = (personagem) => {
+        try {
+            console.log(
+                "⭐ Alterando favorito:",
+                personagem.name
+            );
+
+            const jaExiste = favoritos.some(
+                (favorito) =>
+                    favorito.id === personagem.id
+            );
+
+            let novosFavoritos;
+
+            if (jaExiste) {
+                novosFavoritos = favoritos.filter(
+                    (favorito) =>
+                        favorito.id !== personagem.id
+                );
+
+                toast(
+                    `${personagem.name} removido dos favoritos`
+                );
+
+            } else {
+                novosFavoritos = [
+                    ...favoritos,
+                    personagem
+                ];
+
+                toast.success(
+                    `${personagem.name} marcado como favorito!`
+                );
+            }
+
+            localStorage.setItem(
+                "favoritos",
+                JSON.stringify(novosFavoritos)
+            );
+
+            const idsFavoritos =
+                novosFavoritos.map(
+                    (favorito) => favorito.id
+                );
+
+            sessionStorage.setItem(
+                "favoritos",
+                JSON.stringify(idsFavoritos)
+            );
+
+            setFavoritos(novosFavoritos);
+
+        } catch (error) {
+            console.error(
+                "❌ Erro ao alterar favorito:",
+                error.message
+            );
         }
     };
 
     useEffect(() => {
-        buscarPersonagens();
+        console.log(
+            "🚀 Componente montado..."
+        );
+
+        const personagensSalvos =
+            sessionStorage.getItem("personagens");
+
+        if (personagensSalvos) {
+            const dados =
+                JSON.parse(personagensSalvos);
+
+            setPersonagens(dados);
+
+            console.log(
+                "📂 Personagens carregados do SessionStorage:",
+                dados.length
+            );
+
+        } else {
+            console.log(
+                "📭 Nenhum personagem encontrado no SessionStorage"
+            );
+
+            buscarPersonagens();
+        }
+
+        const favoritosSalvos =
+            localStorage.getItem("favoritos");
+
+        if (favoritosSalvos) {
+            const dados =
+                JSON.parse(favoritosSalvos);
+
+            setFavoritos(dados);
+
+            console.log(
+                "📂 Favoritos carregados do LocalStorage:",
+                dados.length
+            );
+
+        } else {
+            console.log(
+                "📭 Nenhum favorito encontrado"
+            );
+        }
+
+        const cookies =
+            document.cookie.split(";");
+
+        for (let cookie of cookies) {
+            const [chave, valor] =
+                cookie.trim().split("=");
+
+            if (chave === "tema") {
+                setTema(valor);
+
+                console.log(
+                    "🎨 Tema carregado do Cookie:",
+                    valor
+                );
+            }
+        }
     }, []);
 
-    const indiceInicial = (paginaAtual - 1) * itensPorPagina;
-    const indiceFinal = indiceInicial + itensPorPagina;
-    const personagensPaginados = personagens.slice(indiceInicial, indiceFinal);
+    const alternarTema = () => {
+        try {
+            const novoTema =
+                tema === "light"
+                    ? "dark"
+                    : "light";
+
+            console.log(
+                `🎨 Alterando tema de ${tema} para ${novoTema}`
+            );
+
+            const dataExpiracao =
+                new Date();
+
+            dataExpiracao.setDate(
+                dataExpiracao.getDate() + 30
+            );
+
+            document.cookie =
+                `tema=${novoTema}; ` +
+                `expires=${dataExpiracao.toUTCString()}; ` +
+                `path=/`;
+
+            setTema(novoTema);
+
+            console.log(
+                "💾 Tema salvo no Cookie"
+            );
+
+        } catch (error) {
+            console.error(
+                "❌ Erro ao alterar tema:",
+                error.message
+            );
+        }
+    };
+
+    const indiceInicial =
+        (paginaAtual - 1) *
+        itensPorPagina;
+
+    const indiceFinal =
+        indiceInicial +
+        itensPorPagina;
+
+    const personagensPaginados =
+        personagens.slice(
+            indiceInicial,
+            indiceFinal
+        );
 
     return (
-        <main className={styles.main}>
-            {carregando && <p className={styles.carregando}>Carregando...</p>}
-            {erro && <p>{erro}</p>}
+        <main
+            className={`${styles.main} ${
+                tema === "dark"
+                    ? styles.dark
+                    : styles.light
+            }`}
+        >
 
-            {!carregando && !erro && (
-                <>
-                    <div className={styles.grid}>
-                        {personagensPaginados.map((personagem) => (
-                            <CharacterCard
-                                key={personagem.id}
-                                foto={personagem.image}
-                                nome={personagem.name}
-                                casa={personagem.house}
-                                ator={personagem.actor}
-                                especie={personagem.species}
-                                patrono={personagem.patronus}
-                                dataNascimento={personagem.dateOfBirth}
-                                corOlhos={personagem.eyeColour}
-                                corCabelo={personagem.hairColour}
-                                vivo={personagem.alive}
-                            />
-                        ))}
-                    </div>
+            <div className={styles.cabecalho}>
 
-                    <div
-                        style={{
-                            marginTop: '20px',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            width: '100%',
-                        }}>
-                            {/* baixei esse provider para poder estilizar a paginação e mudar as cores dos números */}
-                        <ConfigProvider
-                            theme={{
-                                components: {
-                                    Pagination: {
-                                        colorBgContainer: '#1e293b',
-                                        itemBg: '#1f2937',
-                                        colorText: '#ffffff',
-                                        colorTextDisabled: '#4b5563',
-                                        colorPrimary: '#9333ea',
-                                        colorPrimaryHover: '#a855f7',
-                                    },
-                                },
-                            }}>
-                            <Pagination
-                                simple
-                                showSizeChanger={false}
-                                current={paginaAtual}
-                                pageSize={itensPorPagina}
-                                total={personagens.length}
-                                onChange={(pagina) => setPaginaAtual(pagina)}
-                            />
-                        </ConfigProvider>
-                    </div>
-                </>
+                <h1>Personagens</h1>
+
+                <button
+                    className={styles.botaoTema}
+                    onClick={alternarTema}
+                >
+                    {tema === "light"
+                        ? "☀️ Light"
+                        : "🌙 Dark"}
+                </button>
+
+            </div>
+
+            {loading && (
+                <p className={styles.carregando}>
+                    Carregando...
+                </p>
+            )}
+
+            {erro && (
+                <p className={styles.erro}>
+                    {erro}
+                </p>
+            )}
+
+            {!loading && !erro && (
+                <Tabs
+                    defaultActiveKey="todos"
+                    onChange={() =>
+                        setPaginaAtual(1)
+                    }
+                    items={[
+                        {
+                            key: "todos",
+
+                            label:
+                                `Todos (${personagens.length})`,
+
+                            children: (
+                                <>
+                                    <div
+                                        className={
+                                            styles.grid
+                                        }
+                                    >
+                                        {personagensPaginados.map(
+                                            (personagem) => (
+                                                <CharacterCard
+                                                    key={
+                                                        personagem.id
+                                                    }
+
+                                                    personagem={
+                                                        personagem
+                                                    }
+
+                                                    favorito={favoritos.some(
+                                                        (favorito) =>
+                                                            favorito.id ===
+                                                            personagem.id
+                                                    )}
+
+                                                    alterarFavorito={
+                                                        alterarFavorito
+                                                    }
+                                                />
+                                            )
+                                        )}
+                                    </div>
+
+                                    <div
+                                        className={
+                                            styles.paginacao
+                                        }
+                                    >
+                                        <Pagination
+                                            simple
+                                            current={
+                                                paginaAtual
+                                            }
+                                            pageSize={
+                                                itensPorPagina
+                                            }
+                                            total={
+                                                personagens.length
+                                            }
+                                            showSizeChanger={
+                                                false
+                                            }
+                                            onChange={
+                                                setPaginaAtual
+                                            }
+                                        />
+                                    </div>
+                                </>
+                            ),
+                        },
+
+                        {
+                            key: "favoritos",
+
+                            label:
+                                `Favoritos (${favoritos.length})`,
+
+                            children:
+                                favoritos.length ===
+                                0 ? (
+
+                                    <div
+                                        className={
+                                            styles.semFavoritos
+                                        }
+                                    >
+                                        <h2>
+                                            Nenhum
+                                            personagem
+                                            foi
+                                            favoritado.
+                                        </h2>
+
+                                        <p>
+                                            Clique no
+                                            coração de um
+                                            personagem
+                                            para
+                                            adicioná-lo
+                                            aos
+                                            favoritos.
+                                        </p>
+                                    </div>
+
+                                ) : (
+
+                                    <div
+                                        className={
+                                            styles.grid
+                                        }
+                                    >
+                                        {favoritos.map(
+                                            (personagem) => (
+                                                <CharacterCard
+                                                    key={
+                                                        personagem.id
+                                                    }
+
+                                                    personagem={
+                                                        personagem
+                                                    }
+
+                                                    favorito={
+                                                        true
+                                                    }
+
+                                                    alterarFavorito={
+                                                        alterarFavorito
+                                                    }
+                                                />
+                                            )
+                                        )}
+                                    </div>
+                                ),
+                        },
+                    ]}
+                />
             )}
         </main>
     );
