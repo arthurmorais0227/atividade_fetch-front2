@@ -10,12 +10,23 @@
     color: white;
 }
 
+.dark :global(.ant-tabs-tab-btn) {
+    color: #cbd5e1;
+}
+
+.dark :global(.ant-tabs-tab:hover .ant-tabs-tab-btn),
+.dark :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {
+    color: #f8fafc;
+}
+
+.dark :global(.ant-tabs-ink-bar) {
+    background: #a78bfa;
+}
 
 .light {
     background: #f9fafb;
     color: #1f2937;
 }
-
 
 .cabecalho {
     display: flex;
@@ -28,7 +39,6 @@
 .cabecalho h1 {
     margin: 0;
 }
-
 
 .botaoTema {
     border: none;
@@ -48,15 +58,10 @@
     background: #7c3aed;
 }
 
-
 .grid {
     display: grid;
 
-    grid-template-columns:
-        repeat(
-            auto-fill,
-            minmax(250px, 1fr)
-        );
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 
     gap: 1.5rem;
 
@@ -64,7 +69,6 @@
 
     margin-bottom: 2rem;
 }
-
 
 .paginacao {
     display: flex;
@@ -75,13 +79,11 @@
     margin-top: 20px;
 }
 
-
 .carregando {
     text-align: center;
 
     font-size: 1.2rem;
 }
-
 
 .erro {
     text-align: center;

@@ -1,223 +1,153 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import styles from "./Modal.module.css";
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import styles from './Modal.module.css';
 
 export default function Modal({
-  isOpen,
-  onClose,
-  foto,
-  nome,
-  casa,
-  especie,
-  patrono,
-  dataNascimento,
-  corOlhos,
-  corCabelo,
-  ator,
-  vivo,
+    isOpen,
+    onClose,
+    foto,
+    nome,
+    casa,
+    especie,
+    patrono,
+    dataNascimento,
+    corOlhos,
+    corCabelo,
+    ator,
+    vivo,
 }) {
-  const [tema, setTema] = useState("light");
+    const [tema, setTema] = useState('light');
 
-  useEffect(() => {
-    if (!isOpen) return;
+    useEffect(() => {
+        if (!isOpen) return;
 
-    try {
-      console.log("🔍 Procurando tema no Cookie...");
+        try {
+            console.log('🔍 Procurando tema no Cookie...');
 
-      const cookies =
-        document.cookie.split(";");
+            const cookies = document.cookie.split(';');
 
-      let temaSalvo = null;
+            let temaSalvo = null;
 
-      for (let cookie of cookies) {
-        const [chave, valor] =
-          cookie.trim().split("=");
+            for (let cookie of cookies) {
+                const [chave, valor] = cookie.trim().split('=');
 
-        if (chave === "tema") {
-          temaSalvo = valor;
-          break;
+                if (chave === 'tema') {
+                    temaSalvo = valor;
+                    break;
+                }
+            }
+
+            if (temaSalvo === 'dark') {
+                setTema('dark');
+
+                console.log('🌙 Modal aberto no modo escuro');
+            } else {
+                setTema('light');
+
+                console.log('☀️ Modal aberto no modo claro');
+            }
+        } catch (error) {
+            console.error('❌ Erro ao ler tema:', error.message);
+
+            setTema('light');
         }
-      }
+    }, [isOpen]);
 
-      if (temaSalvo === "dark") {
-        setTema("dark");
+    useEffect(() => {
+        const atualizarTema = (event) => setTema(event.detail);
+        window.addEventListener('temaAlterado', atualizarTema);
 
-        console.log(
-          "🌙 Modal aberto no modo escuro"
-        );
-      } else {
-        setTema("light");
+        return () => window.removeEventListener('temaAlterado', atualizarTema);
+    }, []);
 
-        console.log(
-          "☀️ Modal aberto no modo claro"
-        );
-      }
-
-    } catch (error) {
-      console.error(
-        "❌ Erro ao ler tema:",
-        error.message
-      );
-
-      setTema("light");
+    if (!isOpen) {
+        return null;
     }
-  }, [isOpen]);
 
-  if (!isOpen) {
-    return null;
-  }
+    return (
+        <div
+            className={`${styles.overlay} ${tema === 'dark' ? styles.dark : styles.light}`}
+            onClick={onClose}
+            role="presentation">
+            <div className={styles.modal} onClick={(event) => event.stopPropagation()}>
+                <button type="button" className={styles.fechar} onClick={onClose}>
+                    ✕
+                </button>
 
-  return (
-    <div
-      className={`${styles.overlay} ${tema === "dark"
-          ? styles.dark
-          : styles.light
-        }`}
-      onClick={onClose}
-      role="presentation"
-    >
-      <div
-        className={styles.modal}
-        onClick={(event) =>
-          event.stopPropagation()
-        }
-      >
+                <div className={styles.conteudo}>
+                    <div className={styles.imagemBox}>
+                        <Image
+                            src={foto || '/images/sem-foto.png'}
+                            alt={nome || 'Personagem'}
+                            width={180}
+                            height={240}
+                            className={styles.imagem}
+                        />
+                    </div>
 
-        <button
-          type="button"
-          className={styles.fechar}
-          onClick={onClose}
-        >
-          ✕
-        </button>
+                    <div className={styles.info}>
+                        <h3>{nome || 'Personagem'}</h3>
 
-        <div className={styles.conteudo}>
+                        <div className={styles.grid}>
+                            <div>
+                                <span>Casa</span>
 
-          <div className={styles.imagemBox}>
-            <Image
-              src={
-                foto ||
-                "/images/sem-foto.png"
-              }
-              alt={
-                nome ||
-                "Personagem"
-              }
-              width={180}
-              height={240}
-              className={styles.imagem}
-            />
-          </div>
+                                <p>{casa || 'Não informado'}</p>
+                            </div>
 
-          <div className={styles.info}>
+                            <div>
+                                <span>Espécie</span>
 
-            <h3>
-              {nome ||
-                "Personagem"}
-            </h3>
+                                <p>{especie || 'Não informado'}</p>
+                            </div>
 
-            <div
-              className={
-                styles.grid
-              }
-            >
+                            <div>
+                                <span>Patrono</span>
 
-              <div>
-                <span>
-                  Casa
-                </span>
+                                <p>{patrono || 'Não informado'}</p>
+                            </div>
 
-                <p>
-                  {casa ||
-                    "Não informado"}
-                </p>
-              </div>
+                            <div>
+                                <span>Data de nascimento</span>
 
-              <div>
-                <span>
-                  Espécie
-                </span>
+                                <p>{dataNascimento || 'Não informado'}</p>
+                            </div>
 
-                <p>
-                  {especie ||
-                    "Não informado"}
-                </p>
-              </div>
+                            <div>
+                                <span>Cor dos olhos</span>
 
-              <div>
-                <span>
-                  Patrono
-                </span>
+                                <p>{corOlhos || 'Não informado'}</p>
+                            </div>
 
-                <p>
-                  {patrono ||
-                    "Não informado"}
-                </p>
-              </div>
+                            <div>
+                                <span>Cor do cabelo</span>
 
-              <div>
-                <span>
-                  Data de nascimento
-                </span>
+                                <p>{corCabelo || 'Não informado'}</p>
+                            </div>
 
-                <p>
-                  {dataNascimento ||
-                    "Não informado"}
-                </p>
-              </div>
+                            <div>
+                                <span>Ator/Atriz</span>
 
-              <div>
-                <span>
-                  Cor dos olhos
-                </span>
+                                <p>{ator || 'Não informado'}</p>
+                            </div>
 
-                <p>
-                  {corOlhos ||
-                    "Não informado"}
-                </p>
-              </div>
+                            <div>
+                                <span>Status</span>
 
-              <div>
-                <span>
-                  Cor do cabelo
-                </span>
-
-                <p>
-                  {corCabelo ||
-                    "Não informado"}
-                </p>
-              </div>
-
-              <div>
-                <span>
-                  Ator/Atriz
-                </span>
-
-                <p>
-                  {ator ||
-                    "Não informado"}
-                </p>
-              </div>
-
-              <div>
-                <span>
-                  Status
-                </span>
-
-                <p>
-                  {vivo === true
-                    ? "Vivo"
-                    : vivo === false
-                      ? "Morto"
-                      : "Não informado"}
-                </p>
-              </div>
+                                <p>
+                                    {vivo === true
+                                        ? 'Vivo'
+                                        : vivo === false
+                                          ? 'Morto'
+                                          : 'Não informado'}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }

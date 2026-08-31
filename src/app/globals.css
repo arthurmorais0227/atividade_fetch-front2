@@ -3,3 +3,21 @@
     margin: 0;
     padding: 0;
 }
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    background: #0d0f1a;
+    color: #f4f4f5;
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+html[data-theme='light'] body {
+    background: #f9fafb;
+    color: #1f2937;
+}

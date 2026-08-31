@@ -23,13 +23,12 @@
     border-bottom: 1px solid rgba(139, 92, 246, 0.15);
 }
 
-
 .logoLink {
     margin-left: 24rem;
     opacity: 0.5;
 }
 .heroInicial::before {
-    content: "";
+    content: '';
 
     position: absolute;
 
@@ -90,7 +89,7 @@
 
     border: 1px solid rgba(139, 92, 246, 0.35);
 
-    background: rgba(139, 92, 246, 0.10);
+    background: rgba(139, 92, 246, 0.1);
 
     font-size: 31px;
 
@@ -160,7 +159,10 @@
 
     font-weight: 600;
 
-    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .botaoPrimario {
@@ -186,7 +188,7 @@
 .botaoSecundario {
     color: #d4d4d8;
 
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 
     background: rgba(255, 255, 255, 0.035);
 }
@@ -270,7 +272,7 @@
 
     border: 1px solid rgba(139, 92, 246, 0.25);
 
-    background: rgba(139, 92, 246, 0.10);
+    background: rgba(139, 92, 246, 0.1);
 
     font-size: 40px;
 
@@ -326,7 +328,10 @@
     border-radius: 16px;
     background: #111421;
     border: 1px solid rgba(255, 255, 255, 0.06);
-    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 .cartaoTecnologia:hover {
@@ -343,7 +348,7 @@
     justify-content: center;
     margin-bottom: 16px;
     border-radius: 12px;
-    background: rgba(139, 92, 246, 0.10);
+    background: rgba(139, 92, 246, 0.1);
     border: 1px solid rgba(139, 92, 246, 0.15);
     font-size: 20px;
 }
@@ -371,11 +376,12 @@
 
     border-radius: 25px;
 
-    background: radial-gradient(circle at center, rgba(139, 92, 246, 0.14), transparent 60%), #111421;
+    background:
+        radial-gradient(circle at center, rgba(139, 92, 246, 0.14), transparent 60%), #111421;
 
-    border: 1px solid rgba(139, 92, 246, 0.20);
+    border: 1px solid rgba(139, 92, 246, 0.2);
 
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.20);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
 .chamadaFinal > span {
@@ -424,7 +430,10 @@
     border: 1px solid rgba(251, 191, 36, 0.35);
     background: rgba(139, 92, 246, 0.15);
     box-shadow: 0 0 25px rgba(139, 92, 246, 0.08);
-    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .botaoPrincipal:hover {
@@ -513,4 +522,41 @@
     .chamadaFinal {
         margin: 20px 20px 60px;
     }
+}
+
+:global(html[data-theme='light']) .principal {
+    background: #f8fafc;
+    color: #1f2937;
+}
+
+:global(html[data-theme='light']) .heroInicial {
+    background:
+        linear-gradient(90deg, rgba(248, 250, 252, 0.9), rgba(241, 245, 249, 0.72)),
+        url('/images/wallpaper.jpg') center/cover no-repeat;
+}
+
+:global(html[data-theme='light']) .subtituloHero,
+:global(html[data-theme='light']) .textoIntroducao,
+:global(html[data-theme='light']) .objetivo p,
+:global(html[data-theme='light']) .descricaoDaSecao,
+:global(html[data-theme='light']) .cartaoTecnologia p,
+:global(html[data-theme='light']) .chamadaFinal p {
+    color: #4b5563;
+}
+
+:global(html[data-theme='light']) .botaoSecundario {
+    color: #374151;
+    background: rgba(255, 255, 255, 0.72);
+    border-color: rgba(31, 41, 55, 0.14);
+}
+
+:global(html[data-theme='light']) .objetivo {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(248, 250, 252, 0.7));
+}
+
+:global(html[data-theme='light']) .cartaoTecnologia,
+:global(html[data-theme='light']) .chamadaFinal {
+    background: #ffffff;
+    border-color: rgba(124, 58, 237, 0.16);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
 }

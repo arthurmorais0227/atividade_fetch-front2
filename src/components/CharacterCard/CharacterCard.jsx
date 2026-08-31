@@ -1,71 +1,63 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import styles from "./CharacterCard.module.css";
-import Modal from "@/components/characterModal/Modal";
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import styles from './CharacterCard.module.css';
+import Modal from '@/components/characterModal/Modal';
 
-export default function CharacterCard({
-    personagem,
-    favorito,
-    alterarFavorito,
-}) {
+export default function CharacterCard({ personagem, favorito, alterarFavorito }) {
     const [modalAberto, setModalAberto] = useState(false);
-    const [tema, setTema] = useState("light");
+    const [tema, setTema] = useState('light');
 
     useEffect(() => {
         try {
-            const cookies = document.cookie.split(";");
+            const cookies = document.cookie.split(';');
 
             for (let cookie of cookies) {
-                const [chave, valor] = cookie.trim().split("=");
+                const [chave, valor] = cookie.trim().split('=');
 
-                if (chave === "tema") {
+                if (chave === 'tema') {
                     setTema(valor);
                     break;
                 }
             }
         } catch (error) {
-            console.error("Erro ao ler tema:", error.message);
+            console.error('Erro ao ler tema:', error.message);
         }
+        const atualizarTema = (event) => setTema(event.detail);
+        window.addEventListener('temaAlterado', atualizarTema);
+
+        return () => window.removeEventListener('temaAlterado', atualizarTema);
     }, []);
 
     return (
         <>
             <article
-                className={`${styles.card} ${tema === "dark" ? styles.dark : styles.light}`}
-                onClick={() => setModalAberto(true)}
-            >
+                className={`${styles.card} ${tema === 'dark' ? styles.dark : styles.light}`}
+                onClick={() => setModalAberto(true)}>
                 <Image
                     className={styles.imagem}
-                    src={personagem.image || "/images/sem-foto.png"}
+                    src={personagem.image || '/images/sem-foto.png'}
                     width={130}
                     height={130}
-                    alt={personagem.name || "Personagem"}
+                    alt={personagem.name || 'Personagem'}
                 />
 
-                <p className={styles.nome}>
-                    {personagem.name}
-                </p>
+                <p className={styles.nome}>{personagem.name}</p>
 
-                <p className={styles.texto}>
-                    {personagem.house || "Sem casa"}
-                </p>
+                <p className={styles.texto}>{personagem.house || 'Sem casa'}</p>
 
-                <p className={styles.texto}>
-                    {personagem.actor || "Sem ator"}
-                </p>
+                <p className={styles.texto}>{personagem.actor || 'Sem ator'}</p>
 
                 <button
                     type="button"
-                    className={`${styles.coracao} ${favorito ? styles.coracaoAtivo : ""}`}
+                    className={`${styles.coracao} ${favorito ? styles.coracaoAtivo : ''}`}
                     onClick={(event) => {
                         event.stopPropagation();
                         alterarFavorito(personagem);
                     }}
-                    aria-label={favorito ? "Remover favorito" : "Adicionar favorito"}
-                >
-                    {favorito ? "♥" : "♡"}
+                    aria-label={favorito ? 'Remover favorito' : 'Adicionar favorito'}>
+                    {favorito ? '♥' : '♡'}
                 </button>
             </article>
 
