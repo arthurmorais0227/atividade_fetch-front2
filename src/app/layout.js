@@ -1,5 +1,6 @@
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
+import { cookies } from 'next/headers';
 import Header from '@/components/Header/Header';
 
 export const metadata = {
@@ -7,24 +8,13 @@ export const metadata = {
     description: 'Template do Codeverse',
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+    const tema = (await cookies()).get('tema')?.value === 'dark' ? 'dark' : 'light';
+
     return (
-        <html lang="pt-BR">
+        <html lang="pt-BR" data-theme={tema}>
             <body>
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `
-                            (() => {
-                                const tema = document.cookie
-                                    .split('; ')
-                                    .find((cookie) => cookie.startsWith('tema='))
-                                    ?.split('=')[1] || 'light';
-                                document.documentElement.dataset.theme = tema;
-                            })();
-                        `,
-                    }}
-                />
-                <Header />
+                <Header temaInicial={tema} />
                 {children}
                 <Toaster />
             </body>

@@ -25,7 +25,9 @@ export default function Personagens() {
 
             console.log('🔄 Iniciando busca na API...');
 
-            const response = await axios.get('https://hp-api.onrender.com/api/characters');
+            const response = await axios.get(
+                `${process.env.NEXT_PUBLIC_API_URL}/api/characters`,
+            );
 
             console.log(
                 '📡 Resposta da API:',

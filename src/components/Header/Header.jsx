@@ -7,8 +7,8 @@ import styles from './Header.module.css';
 
 const LOGO = '/images/logo-wizardDex.png';
 
-function Header() {
-    const [tema, setTema] = useState('light');
+function Header({ temaInicial = 'light' }) {
+    const [tema, setTema] = useState(temaInicial);
 
     useEffect(() => {
         const temaSalvo = document.documentElement.dataset.theme || 'light';
