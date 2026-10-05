@@ -1,12 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import styles from './CharacterCard.module.css';
-import Modal from '@/components/characterModal/Modal';
 
 export default function CharacterCard({ personagem, favorito, alterarFavorito }) {
-    const [modalAberto, setModalAberto] = useState(false);
+    const router = useRouter();
     const [tema, setTema] = useState('light');
 
     useEffect(() => {
@@ -31,50 +31,33 @@ export default function CharacterCard({ personagem, favorito, alterarFavorito })
     }, []);
 
     return (
-        <>
-            <article
-                className={`${styles.card} ${tema === 'dark' ? styles.dark : styles.light}`}
-                onClick={() => setModalAberto(true)}>
-                <Image
-                    className={styles.imagem}
-                    src={personagem.image || '/images/sem-foto.png'}
-                    width={130}
-                    height={130}
-                    alt={personagem.name || 'Personagem'}
-                />
-
-                <p className={styles.nome}>{personagem.name}</p>
-
-                <p className={styles.texto}>{personagem.house || 'Sem casa'}</p>
-
-                <p className={styles.texto}>{personagem.actor || 'Sem ator'}</p>
-
-                <button
-                    type="button"
-                    className={`${styles.coracao} ${favorito ? styles.coracaoAtivo : ''}`}
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        alterarFavorito(personagem);
-                    }}
-                    aria-label={favorito ? 'Remover favorito' : 'Adicionar favorito'}>
-                    {favorito ? '♥' : '♡'}
-                </button>
-            </article>
-
-            <Modal
-                isOpen={modalAberto}
-                onClose={() => setModalAberto(false)}
-                foto={personagem.image}
-                nome={personagem.name}
-                casa={personagem.house}
-                especie={personagem.species}
-                patrono={personagem.patronus}
-                dataNascimento={personagem.dateOfBirth}
-                corOlhos={personagem.eyeColour}
-                corCabelo={personagem.hairColour}
-                ator={personagem.actor}
-                vivo={personagem.alive}
+        <article
+            className={`${styles.card} ${tema === 'dark' ? styles.dark : styles.light}`}
+            onClick={() => router.push(`/personagens/${encodeURIComponent(personagem.id)}`)}>
+            <Image
+                className={styles.imagem}
+                src={personagem.image || '/images/sem-foto.png'}
+                width={130}
+                height={130}
+                alt={personagem.name || 'Personagem'}
             />
-        </>
+
+            <p className={styles.nome}>{personagem.name}</p>
+
+            <p className={styles.texto}>{personagem.house || 'Sem casa'}</p>
+
+            <p className={styles.texto}>{personagem.actor || 'Sem ator'}</p>
+
+            <button
+                type="button"
+                className={`${styles.coracao} ${favorito ? styles.coracaoAtivo : ''}`}
+                onClick={(event) => {
+                    event.stopPropagation();
+                    alterarFavorito(personagem);
+                }}
+                aria-label={favorito ? 'Remover favorito' : 'Adicionar favorito'}>
+                {favorito ? '♥' : '♡'}
+            </button>
+        </article>
     );
 }
