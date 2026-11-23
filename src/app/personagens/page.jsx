@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '@/lib/api';
 import CharacterCard from '@/components/CharacterCard/CharacterCard';
 import FormModal from '@/components/FormModal/FormModal'; // 👈 Import aqui
 import styles from './personagens.module.css';
@@ -24,9 +24,7 @@ export default function Personagens() {
     const buscarPersonagens = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/characters`,
-            );
+            const response = await api.get('/api/characters');
             sessionStorage.setItem('personagens', JSON.stringify(response.data));
             setPersonagens(response.data);
         } catch (error) {

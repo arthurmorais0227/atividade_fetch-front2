@@ -1,6 +1,6 @@
 'use client';
 
-import axios from 'axios';
+import api from '@/lib/api';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Modal from '@/components/characterModal/Modal';
@@ -22,9 +22,7 @@ export default function PersonagemDetalhe() {
                 let encontrado = listaSalva.find((item) => String(item.id) === String(id));
 
                 if (!encontrado) {
-                    const response = await axios.get(
-                        `${process.env.NEXT_PUBLIC_API_URL}/api/characters`,
-                    );
+                    const response = await api.get('/api/characters');
                     encontrado = response.data.find((item) => String(item.id) === String(id));
                 }
 

@@ -18,6 +18,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
+## API de personagens
+
+A aplicação usa `https://hp-api.onrender.com` por padrão. Para apontar para outra API compatível, defina `NEXT_PUBLIC_API_URL` no ambiente de execução ou nas variáveis do projeto na Vercel, sem incluir `/api/characters` no valor.
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
