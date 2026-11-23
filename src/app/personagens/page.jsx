@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import api from '@/lib/api';
+import { charactersStorageKey, fetchCharacters } from '@/lib/api';
 import CharacterCard from '@/components/CharacterCard/CharacterCard';
 import FormModal from '@/components/FormModal/FormModal'; // 👈 Import aqui
 import styles from './personagens.module.css';
@@ -24,9 +24,9 @@ export default function Personagens() {
     const buscarPersonagens = async () => {
         try {
             setLoading(true);
-            const response = await api.get('/api/characters');
-            sessionStorage.setItem('personagens', JSON.stringify(response.data));
-            setPersonagens(response.data);
+            const lista = await fetchCharacters();
+            sessionStorage.setItem(charactersStorageKey, JSON.stringify(lista));
+            setPersonagens(lista);
         } catch (error) {
             console.error('❌ Erro na busca:', error.message);
             setErro('Erro ao carregar personagens');
@@ -71,14 +71,14 @@ export default function Personagens() {
         const listaAtualizada = [novoPersonagem, ...personagens];
 
         setPersonagens(listaAtualizada);
-        sessionStorage.setItem('personagens', JSON.stringify(listaAtualizada));
+        sessionStorage.setItem(charactersStorageKey, JSON.stringify(listaAtualizada));
 
         toast.success(`Personagem ${novoPersonagem.name} criado com sucesso!`);
         setModalAberta(false);
     };
 
     useEffect(() => {
-        const personagensSalvos = sessionStorage.getItem('personagens');
+        const personagensSalvos = sessionStorage.getItem(charactersStorageKey);
 
         if (personagensSalvos) {
             setPersonagens(JSON.parse(personagensSalvos));

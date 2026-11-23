@@ -1,6 +1,6 @@
 'use client';
 
-import api from '@/lib/api';
+import { charactersStorageKey, fetchCharacters } from '@/lib/api';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Modal from '@/components/characterModal/Modal';
@@ -17,13 +17,13 @@ export default function PersonagemDetalhe() {
 
         const buscarPersonagem = async () => {
             try {
-                const personagensSalvos = sessionStorage.getItem('personagens');
+                const personagensSalvos = sessionStorage.getItem(charactersStorageKey);
                 const listaSalva = personagensSalvos ? JSON.parse(personagensSalvos) : [];
                 let encontrado = listaSalva.find((item) => String(item.id) === String(id));
 
                 if (!encontrado) {
-                    const response = await api.get('/api/characters');
-                    encontrado = response.data.find((item) => String(item.id) === String(id));
+                    const lista = await fetchCharacters();
+                    encontrado = lista.find((item) => String(item.id) === String(id));
                 }
 
                 if (ativo) {
